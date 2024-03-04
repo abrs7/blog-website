@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 # Create your models here.
 
 STATUS = ((0,'Draft'),(1,'Published'))
@@ -11,6 +12,9 @@ class Post(models.Model):
     updated_on = models.DateTimeField(auto_now = True)
     content = models.TextField()
     status = models.IntegerField(choices = STATUS, default= 0)
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.slug})
 
 
     class Meta():
