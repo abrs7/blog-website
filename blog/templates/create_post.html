@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card my-4 mx-4  md-5 float-left">
+  <h2> Create a Post</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn btn-primary" type="submit">Create Post</button>
+    </form>
+</div>
+
+{% endblock content %}
