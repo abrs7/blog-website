@@ -18,15 +18,27 @@
       <a class="navbar-brand" href="{% url 'post_list' %}">🌐Daily Blog Posts🌐</a>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
+          {% if request.user.is_authenticated %}
           <li class="nav-item text-black">
-            <a class="nav-link text-black font-weight-bold" href="{% url 'signup' %}">Register</a>
+            <p class="nav-link text-black font-weight-bold" >Welcome {{request.user.username}}</p>
           </li>
+          {% else %}
+          <li class="nav-item text-black">
+            <a class="nav-link text-black font-weight-bold" href="{% url 'log_in' %}">Login</a>
+          </li>
+          {% endif %}
           <li class="nav-item text-black">
             <a class="nav-link text-black font-weight-bold" href="{% url 'create_post' %}">Create</a>
           </li>
           <li class="nav-item text-black">
             <a class="nav-link text-black font-weight-bold" href="#">About</a>
           </li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item text-black">
+            <a class="nav-link text-black font-weight-bold" href="{% url 'logout' %}">Logout</a>
+          </li>
+          {% endif %}
+          
         </ul>
       </div>
     </div>
