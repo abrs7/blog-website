@@ -28,7 +28,8 @@
          <button class="btn btn-secondary mx-6">READ More</button>
       </a>
       </div>
-      <h5 class=" mx-12 float-right ">Created by {{post_id}}</h5>
+      {% load custom_filters %}
+      <h5 class="text-green mx-12 float-right " style="color: goldenrod;">Created by {{post.author.username|first_upper}}</h5>
     
              
         </div>
