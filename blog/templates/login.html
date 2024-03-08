@@ -4,8 +4,8 @@
 <form class="my-7 card" method="POST">
   {% csrf_token %}
   {{ form }}
-  <p>Don't have an account? Create one <a href="  ">Here</a></p>
-  <button type="submit" class="btn btn-success">Login</button>
+  <p>Don't have an account? Create one <a href="{% url 'signup' %}">Here</a></p>
+  <button type="submit" class="mx-12 width-45 btn btn-success">Login</button>
 </form>
 
 {% endblock content %}
