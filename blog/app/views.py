@@ -52,8 +52,13 @@ def contact(request):
     return render(request,'contact.html',context=message)
 class PostList(ListView):
     queryset = Post.objects.filter(status=1).order_by('-created_on')
-    template_name = 'index.html'
+    # post_id = Post.objects.get(pk=post_id)
 
+    template_name = 'index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post_id'] = self.kwargs.get('post_id')
+        return context
 
 class PostDetail(DetailView):
     
