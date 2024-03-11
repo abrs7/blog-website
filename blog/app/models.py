@@ -25,14 +25,14 @@ class Post(models.Model):
 
 ##user comment Model
 class Comment(models.Model):
-    name = models.CharField(User, max_length= 256)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    name = models.ForeignKey(User,on_delete=models.CASCADE, related_name='comments', max_length= 256)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add = True)
     updated_on = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return f"Comment from {self.name} with post {self.post}"
+        return f"Comment from {self.name.username} with post {self.post}"
     
     
 

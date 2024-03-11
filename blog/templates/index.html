@@ -45,7 +45,29 @@
     
              
         </div>
-      </div>
+
+        
+
+    <a href="#comments-section" class=" toggle-comments-btn" style="padding-left: 40%;">Show Comments</a>
+
+<div id="comments-section" class="comments-section">
+  
+    <div id="comments-container" class="comments-container">
+        <!-- Comments will be displayed here -->
+        {% if not post.comments.all %}
+        <h6>Comment</h6>
+        {% else %}
+         {% for comment in post.comments.all%}
+        <h4>  {{comment.name}} -> {{comment.created_on}}  </h4>
+        <h6>  {{comment.body}} </h6>
+         {% endfor %}
+        {% endif %}
+    </div>
+</div>
+    
+ 
+    </div>
+      
       {% endfor %}
       <div class="pagination">
         <span class="step-links">
