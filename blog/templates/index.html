@@ -48,22 +48,27 @@
 
         
 
-    <a href="#comments-section" class=" toggle-comments-btn" style="padding-left: 40%;">Show Comments</a>
+        
 
-<div id="comments-section" class="comments-section">
+
   
-    <div id="comments-container" class="comments-container">
+    <div style="border-top: 3px solid salmon;">
+
         <!-- Comments will be displayed here -->
-        {% if not post.comments.all %}
-        <h6>Comment</h6>
-        {% else %}
+       
+        
+        <div style="padding-left: 10%; border: 1px sloid #fef356"> 
          {% for comment in post.comments.all%}
+         <div class="bg-primary text-white border border-dark py-2 rounded" style="padding-left: 10%; margin-bottom: 4px;"> 
         <h4>  {{comment.name}} -> {{comment.created_on}}  </h4>
         <h6>  {{comment.body}} </h6>
+      </div>
          {% endfor %}
-        {% endif %}
+         <button class="btn btn-secondary text-white" style="margin-left: 25%; margin-bottom: 10px; margin-top: 10px;"> <a class=" text-white" href="{% url 'add_comments' post.slug %}">Add Comment</a></button>
+         
+        </div>
     </div>
-</div>
+
     
  
     </div>

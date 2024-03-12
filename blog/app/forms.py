@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 
 class CreatePost(forms.ModelForm):
     class Meta:
@@ -23,3 +23,13 @@ class CreatePost(forms.ModelForm):
             slug = f"{base_slug}_{counter}"
             counter += 1
         return slug
+
+
+class CreateComment(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('body',)
+
+        widgets = {
+            'body' : forms.Textarea()
+        }        

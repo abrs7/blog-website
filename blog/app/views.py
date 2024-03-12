@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post
+from .models import Post, Comment
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-from .forms import CreatePost
+from .forms import CreatePost, CreateComment
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -78,3 +78,21 @@ class CreatePost( LoginRequiredMixin ,CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
     
+
+class CreateComment( LoginRequiredMixin ,CreateView):
+    model = Comment
+    form_class = CreateComment
+    template_name = 'add_comments.html'
+    success_url = reverse_lazy('post_list')
+    
+    # fields = ('body',)
+
+
+    def form_valid(self, form):
+        # Get the Post instance associated with the slug
+        post = Post.objects.get(slug=self.kwargs['slug'])
+        # Set the post_id of the comment to the ID of the Post instance
+        form.instance.post_id = post.id
+        # Set the user associated with this comment
+        form.instance.name = self.request.user
+        return super().form_valid(form)
