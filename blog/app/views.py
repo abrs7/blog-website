@@ -4,11 +4,14 @@ from .models import Post, Comment
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from .forms import CreatePost, CreateComment
 from django.contrib.auth.forms import UserCreationForm
+from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+
 # Create your views here.
 
 def login(request):
@@ -29,6 +32,17 @@ def login(request):
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
+
+##List Comment
+def CommentList(request):
+    comments = Comment.objects.all()
+     
+    paginate = Paginator(comments, 3)
+    page_number = request.GET.get('page')
+    comment_page = paginate.get_page(page_number)
+    return render(request, 'index.html', {'comment_page': comment_page})
+
+
 
 def signUp(request):
     
@@ -61,10 +75,24 @@ class PostList(ListView):
         context['post_id'] = self.kwargs.get('post_id')
         return context
 
+# class CommentList(ListView):
+#     queryset = Comment.objects.all()
+#     # post_id = Post.objects.get(pk=post_id)
+
+#     template_name = 'index.html'
+#     paginate_by = 4
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['comment_id'] = self.kwargs.get('comment_id')
+#         return context
+
 class PostDetail(DetailView):
     
     model = Post
     template_name = 'post_detail.html'
+# def PostDetail(request, slug):
+#     post = get_object_or_404(Post, slug=slug)
+#     return render(request, 'post_detail.html', {'post': post})    
 
 
 class CreatePost( LoginRequiredMixin ,CreateView):
@@ -80,6 +108,7 @@ class CreatePost( LoginRequiredMixin ,CreateView):
     
 
 class CreateComment( LoginRequiredMixin ,CreateView):
+    # post = Post.objects.all()
     model = Comment
     form_class = CreateComment
     template_name = 'add_comments.html'

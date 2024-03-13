@@ -46,27 +46,63 @@
              
         </div>
 
-        
+        <h4>{{post.comments.count}}</h4>
+    <div class="" style="display: inline-flex; flex-direction: row; margin-left: 5%;margin-right: 5% ;width: 90%;">
+      <div class="px-0" style="flex:1 ; width: 33.3%; border: 2px ;padding:8px; color: cornflowerblue; text-align: center;">
+        <i class="fas fa-thumbs-up" style="color: cornflowerblue;"></i> Like
+      </div>
+      <div class="px-0" style="flex:1 ; width: 33.3%; border: 2px ;padding:8px; text-align: center;">
+        <a style="color: cornflowerblue;" href="{% url 'add_comments' post.slug %}"> <i class="fas fa-comment" style="color: cornflowerblue; width: 22 px; height: 22 px;"></i> Comment</a> 
+        </div>
+        <div class="px-0" style="flex:1 ; width: 33.3%; border: 2px ; padding:8px; color: cornflowerblue;  text-align: center;">
+          <i class="fas fa-share" style="color: cornflowerblue;"></i> Share
+          </div>
 
+    </div>
         
 
 
   
-    <div style="border-top: 3px solid salmon;">
+    <div style="border-top: 1px solid rgb(104, 99, 99);">
 
         <!-- Comments will be displayed here -->
        
         
-        <div style="padding-left: 10%; border: 1px sloid #fef356"> 
-         {% for comment in post.comments.all%}
-         <div class="bg-primary text-white border border-dark py-2 rounded" style="padding-left: 10%; margin-bottom: 4px;"> 
-        <h4>  {{comment.name}} -> {{comment.created_on}}  </h4>
-        <h6>  {{comment.body}} </h6>
-      </div>
-         {% endfor %}
-         <button class="btn btn-secondary text-white" style="margin-left: 25%; margin-bottom: 10px; margin-top: 10px;"> <a class=" text-white" href="{% url 'add_comments' post.slug %}">Add Comment</a></button>
-         
-        </div>
+       <div style="padding-left: 10%; border: 1px solid #fef356"> 
+    {% for comment in post.comments.all %}
+    <div class="bg-primary text-white border border-dark py-2 rounded rounded-3" style="padding-left: 10%; margin: 10px; margin-top: 2px; border-radius: 30px; margin-bottom: 4px;"> 
+        <h4>{{ comment.name }} -> {{ comment.created_on }}</h4>
+        <h6>{{ comment.body }}</h6>
+    </div>
+    {% endfor %}
+
+    <!-- Pagination links -->
+    <div class="pagination">
+      <span class="step-links">
+      
+        
+         {% if comment_page is null %}
+         <h2>sorry cant help you</h2>
+         {% else %}
+         <h2>{{comment_page.paginator.num_pages}}</h2>
+         {% endif %}
+          {% if comment_page.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ comment_page.previous_page_number }}">previous</a>
+          {% endif %}
+
+          <span class="current">
+              Page {{ comment_page.number }} of {{ comment_page.paginator.num_pages }}.
+          </span>
+
+          {% if comment_page.has_next %}
+              <a href="?page={{ comment_page.next_page_number }}">next</a>
+              <a href="?page={{ comment_page.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+  </div>
+</div>
+
     </div>
 
     
