@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Post
-from .models import Comment
+from .models import Comment, Profile
 from django.db import models
 # Register your models here.
 # admin.site.register(Post)
@@ -20,3 +20,4 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)   
+admin.site.register(Profile)

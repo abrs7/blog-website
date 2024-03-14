@@ -1,16 +1,39 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post, Comment
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-from .forms import CreatePost, CreateComment
+from .models import Post, Comment, Profile
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView, View
+from .forms import CreatePost, CreateComment, CreateProfile
 from django.contrib.auth.forms import UserCreationForm
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+import re
+
+
+    
+
+@login_required
+def edit_profile(request):
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = CreateProfile(request.POST, instance=user_profile)
+        print(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('post_list')
+    else:
+        form = CreateProfile(instance=user_profile)
+
+    return render(request, 'edit_profile.html', {'form': form})
+@login_required
+def view_profile(request):
+    profile = request.user.profile
+    return render(request, 'view_profile.html', {'profile':profile})
 
 # Create your views here.
 
@@ -35,7 +58,13 @@ def login(request):
 
 ##List Comment
 def CommentList(request):
-    comments = Comment.objects.all()
+    post_slug = request.GET.get('post_id')
+
+    # Retrieve the post object based on the post_slug
+    post = get_object_or_404(Post, post=post_slug)
+
+    # Filter comments related to the post
+    comments = Comment.objects.filter(post=post)
      
     paginate = Paginator(comments, 3)
     page_number = request.GET.get('page')
@@ -86,12 +115,47 @@ class PostList(ListView):
 #         context['comment_id'] = self.kwargs.get('comment_id')
 #         return context
 
-class PostDetail(DetailView):
+# class PostDetail(DetailView):
     
-    model = Post
-    template_name = 'post_detail.html'
-# def PostDetail(request, slug):
-#     post = get_object_or_404(Post, slug=slug)
+#     model = Post
+#     template_name = 'post_detail.html'
+    
+class PostDetail(View):
+    def get(self, request, slug):
+        # match = re.match(r'blog_(\d+)', slug)
+        # if match:
+        #     slug = match.group(1)
+        post = get_object_or_404(Post, slug=slug)
+        comment_list = Comment.objects.filter(post=post).order_by('-created_on')
+
+        paginator = Paginator(comment_list, 4)
+        page = request.GET.get('page')
+
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+
+        return render(request, 'post_detail.html', {'post': post, 'comments': comments})    
+
+# def PostDetail(request, post_id):
+#     post = Post.objects.get(id = post_id)
+#     comment_list = Comment.objects.filter(post = post)
+
+#     paginator = Paginator(comment_list, 4)
+#     page = request.GET.get('page')
+
+#     try:
+#         comments = paginator.get(page)
+#     except PageNotAnInteger:
+#         comments = paginator.page(1)
+#     except EmptyPage:
+#         comments = paginator.page(paginator.num_pages)
+#     return render(request, 'post_detail.html', {'post': post, 'comments': comments})            
+
+#     post = get_object_or_404(Post, id = post_id)
 #     return render(request, 'post_detail.html', {'post': post})    
 
 

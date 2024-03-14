@@ -15,4 +15,32 @@
   </div>
 </div>
 
+<div style="padding-left: 10%; border: 1px solid #fef356"> 
+  {% for comment in comments %}
+  <div class="bg-primary text-white border border-dark py-2 rounded rounded-3" style="padding-left: 10%; margin: 10px; margin-top: 2px; border-radius: 30px; margin-bottom: 4px;"> 
+      <h4>{{ comment.name }} -> {{ comment.created_on }}</h4>
+      <h6>{{ comment.body }}</h6>
+  </div>
+  {% endfor %}
+
+  <!-- Pagination links -->
+  <div class="pagination">
+    <span class="step-links">
+        {% if comments.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ comments.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ comments.number }} of {{ comments.paginator.num_pages }}.
+        </span>
+
+        {% if comments.has_next %}
+            <a href="?page={{ comments.next_page_number }}">next</a>
+            <a href="?page={{ comments.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+</div>
+
 {% endblock content %}

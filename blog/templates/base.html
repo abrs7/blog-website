@@ -25,8 +25,10 @@
         <ul class="navbar-nav ml-auto">
           {% if request.user.is_authenticated %}
           <li class="nav-item text-black">
-            <p class="nav-link text-black font-weight-bold" >Welcome {{request.user.username}}</p>
-          </li>
+         <a href="{% url 'edit_profile' %}">     <p class="nav-link text-black font-weight-bold" ><i class="fas fa-user" style="color: white;"></i>  {{request.user.username}}</p>
+         </a>
+        
+        </li>
           <li class="nav-item text-black">
             <a class="nav-link text-black font-weight-bold" href="{% url 'create_post' %}">Create</a>
           </li>

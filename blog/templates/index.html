@@ -70,37 +70,32 @@
         
        <div style="padding-left: 10%; border: 1px solid #fef356"> 
     {% for comment in post.comments.all %}
-    <div class="bg-primary text-white border border-dark py-2 rounded rounded-3" style="padding-left: 10%; margin: 10px; margin-top: 2px; border-radius: 30px; margin-bottom: 4px;"> 
-        <h4>{{ comment.name }} -> {{ comment.created_on }}</h4>
+    <div class="bg-primary text-white border border-dark py-2 rounded rounded-3" style=" padding-left: 10%; margin: 10px; margin-top: 2px; border-radius: 30px; margin-bottom: 4px;"> 
+      
+      <h4>{{ comment.name }} -> {{ comment.created_on }}</h4>
+      
         <h6>{{ comment.body }}</h6>
     </div>
     {% endfor %}
 
     <!-- Pagination links -->
     <div class="pagination">
-      <span class="step-links">
-      
-        
-         {% if comment_page is null %}
-         <h2>sorry cant help you</h2>
-         {% else %}
-         <h2>{{comment_page.paginator.num_pages}}</h2>
-         {% endif %}
-          {% if comment_page.has_previous %}
+            <span class="step-links">
+              {% if post.comments.has_previous %}
               <a href="?page=1">&laquo; first</a>
-              <a href="?page={{ comment_page.previous_page_number }}">previous</a>
-          {% endif %}
-
-          <span class="current">
-              Page {{ comment_page.number }} of {{ comment_page.paginator.num_pages }}.
-          </span>
-
-          {% if comment_page.has_next %}
-              <a href="?page={{ comment_page.next_page_number }}">next</a>
-              <a href="?page={{ comment_page.paginator.num_pages }}">last &raquo;</a>
-          {% endif %}
-      </span>
-  </div>
+              <a href="?page={{ post.comments.previous_page_number }}">previous</a>
+              {% endif %}
+              
+              <span class="current">
+                Page {{ post.comments.number }} of {{ post.comments.paginator.num_pages }}.
+              </span>
+              
+              {% if post.comments.has_next %}
+              <a href="?page={{ post.comments.next_page_number }}">next</a>
+              <a href="?page={{ post.comments.paginator.num_pages }}">last &raquo;</a>
+              {% endif %}
+            </span>
+          </div>
 </div>
 
     </div>
@@ -137,3 +132,37 @@
   </div>
 </div>
 {%endblock%}
+<script>
+  // JavaScript code for fetching comments and handling pagination
+  function fetchComments(postId, page) {
+    fetch(`/comments/${postId}/?page=${page}`)
+      .then(response => response.json())
+      .then(data => {
+        // Update comments section with fetched comments
+        const commentsContainer = document.getElementById(`comments-${postId}`);
+        commentsContainer.innerHTML = '';
+        data.comments.forEach(comment => {
+          commentsContainer.innerHTML += `
+            <div class="bg-primary text-white border border-dark py-2 rounded rounded-3" style=" padding-left: 10%; margin: 10px; margin-top: 2px; border-radius: 30px; margin-bottom: 4px;"> 
+              <h4>${comment.name} -> ${comment.created_on}</h4>
+              <h6>${comment.body}</h6>
+            </div>
+          `;
+        });
+
+        // Update pagination links
+        const paginationContainer = document.getElementById(`comment-pagination-${postId}`);
+        paginationContainer.innerHTML = data.pagination;
+      })
+      .catch(error => console.error('Error fetching comments:', error));
+  }
+
+  // Event listener for pagination links
+  document.addEventListener('click', event => {
+    if (event.target.classList.contains('comment-page-link')) {
+      const postId = event.target.dataset.postId;
+      const page = event.target.dataset.page;
+      fetchComments(postId, page);
+    }
+  });
+</script>

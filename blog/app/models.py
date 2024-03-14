@@ -33,7 +33,19 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment from {self.name.username} with post {self.post}"
-    
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length = 256, blank = False)
+    last_name = models.CharField(max_length = 256, blank = False)
+    profile_pic = models.ImageField()
+    bio = models.TextField()
+    linkedin_url = models.URLField(max_length = 105)
+    location = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+
+
+
     
 
 
