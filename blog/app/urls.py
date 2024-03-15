@@ -12,9 +12,12 @@ urlpatterns = [
     path('post_detail/<slug:slug>/comment',views.CreateComment.as_view(), name='add_comments'),
     path('post_detail/<slug:slug>/comment',views.CreateComment.as_view(), name='post'),
     path('post_detail', views.CommentList, name='comment_page'),
-    path('edit-profile/', views.edit_profile, name='edit_profile'),
-    path('profile/', views.view_profile, name='profile'),
+  
+    path('edit-profile/', views.EditProfile.as_view(), name='edit_profile'),
+    path('profile/', views.view_profile, name='my_profile'),
+    path('', views.my_view, name='profile'),
+]
+
   
 
 
-]

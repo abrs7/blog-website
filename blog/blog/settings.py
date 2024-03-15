@@ -16,7 +16,14 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/media/'
+STATIC_DIR = BASE_DIR / 'static'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+
+
+
+STATICFILES_DIRS = [STATIC_DIR,]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -27,6 +34,7 @@ SECRET_KEY = 'django-insecure-hiyc&aq6(_fc#96uvdfm58m!3$fupw8qyipnk_u!d#!tl#&a!_
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -66,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.profile_context_processor',
             ],
         },
         

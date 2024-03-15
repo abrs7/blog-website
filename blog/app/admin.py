@@ -17,7 +17,9 @@ class PostAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'post', 'created_on')
     date_hierarchy = ('created_on')
-
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user','first_name', 'last_name', 'bio')
+    search_fields = ('user','bio')
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)   
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)

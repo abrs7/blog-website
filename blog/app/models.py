@@ -35,16 +35,34 @@ class Comment(models.Model):
         return f"Comment from {self.name.username} with post {self.post}"
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    first_name = models.CharField(max_length = 256, blank = False)
-    last_name = models.CharField(max_length = 256, blank = False)
-    profile_pic = models.ImageField()
+    OCCUPATION_CHOICES = [
+        ('Web Development', 'Web Development'),
+        ('App Development', 'App Development'),
+        ('Software Engineering', 'Software Engineering'),
+        ('ML Engineer', 'ML Engineer'),
+        ('Ethical Hacker', 'Ethical Hacker'),
+        ('Blockchain', 'Blockchain'),
+        ('Cryptography', 'Cryptography'),
+    ]
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=256, blank=False)
+    last_name = models.CharField(max_length=256, blank=False)
+    profile_pic = models.ImageField(null=True, blank=True,default='bg.jpg', upload_to='images/')
     bio = models.TextField()
-    linkedin_url = models.URLField(max_length = 105)
-    location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    linkedin_url = models.URLField(max_length=105, default='')
+    location = models.CharField(max_length=30, default='', blank=True)
+    birth_date = models.DateField(null=True, default='', blank=True)
+    phone = models.IntegerField(null=True,default='', blank=True)  # Allow null values
+    github = models.URLField(max_length=256, default='')
+    occupation = models.CharField(max_length=256,default='', choices=OCCUPATION_CHOICES)
+    website_url = models.URLField(max_length=256, default='')
+    instagram_url = models.URLField(max_length=256, default='')
+    facebook_url = models.URLField(max_length=256, default='')  # Provide a default value
+    twitter_url = models.URLField(max_length=256, default='')
 
-
+    def __str__(self):
+        return str(self.user)
+   
 
     
 

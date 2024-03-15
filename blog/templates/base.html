@@ -25,8 +25,12 @@
         <ul class="navbar-nav ml-auto">
           {% if request.user.is_authenticated %}
           <li class="nav-item text-black">
-         <a href="{% url 'edit_profile' %}">     <p class="nav-link text-black font-weight-bold" ><i class="fas fa-user" style="color: white;"></i>  {{request.user.username}}</p>
+         <a href="{% url 'edit_profile' %}">     <p class="nav-link text-black font-weight-bold" >
+          
+              <img class="rounded-circle  " src='{{ profile.profile_pic.url}}' width="25" height="25">
+           {{request.user.username}}</p>
          </a>
+         
         
         </li>
           <li class="nav-item text-black">
@@ -40,6 +44,9 @@
           
           <li class="nav-item text-black">
             <a class="nav-link text-black font-weight-bold" href="#">About</a>
+          </li>
+          <li class="nav-item text-black">
+            <a class="nav-link text-black font-weight-bold" href="{% url 'my_profile' %}">Profile</a>
           </li>
           {% if request.user.is_authenticated %}
           <li class="nav-item text-black">

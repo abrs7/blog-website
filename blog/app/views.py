@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Comment, Profile
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView, View
-from .forms import CreatePost, CreateComment, CreateProfile
+from .forms import CreatePost, CreateComment,  UserProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse, reverse_lazy
@@ -15,26 +15,37 @@ import re
 
 
     
+class EditProfile(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = UserProfileForm
+    template_name = 'edit_profile.html'
+    success_url = reverse_lazy('profile')
 
-@login_required
-def edit_profile(request):
-    user_profile, created = Profile.objects.get_or_create(user=request.user)
+    def get_object(self):
+        return self.request.user.profile
+    # def form_valid(self, form):
+    #     form.instance.user = self.request.user
+    #     if 'profile_pic' in self.request.FILES:
+    #         form.instance.profile_pic = self.request.FILES['profile_pic']
+    #     form.save()
+    #     return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        if self.request.FILES.get('profile_pic'):
+            form.instance.profile_pic = self.request.FILES['profile_pic']
+        form.save()
+        return super().form_valid(form)
 
-    if request.method == 'POST':
-        form = CreateProfile(request.POST, instance=user_profile)
-        print(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('post_list')
-    else:
-        form = CreateProfile(instance=user_profile)
-
-    return render(request, 'edit_profile.html', {'form': form})
+# @login_required
+# def view_profile(request):
+#     profile = request.user.profile
+#     print(profile.profile_pic)
+#     return render(request, 'view_profile.html', {'profile':profile})
 @login_required
 def view_profile(request):
     profile = request.user.profile
+    print(profile.profile_pic)
     return render(request, 'view_profile.html', {'profile':profile})
-
 # Create your views here.
 
 def login(request):
@@ -103,7 +114,11 @@ class PostList(ListView):
         context = super().get_context_data(**kwargs)
         context['post_id'] = self.kwargs.get('post_id')
         return context
-
+def my_view(request):
+    # Assuming you have logic to retrieve the profile associated with the current user
+    profile = Profile.objects.get(user=request.user)  # Adjust this to fit your actual logic
+    
+    return render(request, 'base.html', {'profile': profile})
 # class CommentList(ListView):
 #     queryset = Comment.objects.all()
 #     # post_id = Post.objects.get(pk=post_id)

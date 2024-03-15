@@ -2,10 +2,10 @@ from django import forms
 from .models import Post, Comment, Profile
 
 
-class CreateProfile(forms.ModelForm):
+class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'profile_pic', 'linkedin_url', 'location', 'birth_date')
+        fields = ('first_name', 'last_name', 'profile_pic',  'occupation', 'phone', 'github', 'website_url', 'facebook_url', 'instagram_url', 'bio', 'linkedin_url', 'location', 'birth_date')
 
 class CreatePost(forms.ModelForm):
     class Meta:
