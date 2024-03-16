@@ -72,7 +72,8 @@
        
         
        <div style="padding-left: 10%; border: 1px solid #fef356"> 
-    {% for comment in post.comments.all %}
+    {% if post.comments.count >= 3 %}
+    {% for comment in post.comments.all|slice:":4" %}
     <div class="bg-primary text-white border border-dark py-2 rounded rounded-3" style=" padding-left: 10%; margin: 10px; margin-top: 2px; border-radius: 30px; margin-bottom: 4px;"> 
       
       <h4>{{ comment.name }} -> {{ comment.created_on }}</h4>
@@ -81,6 +82,22 @@
     </div>
     {% endfor %}
 
+    {% endif %}
+    <button class="btn btn-secondary mt-3 mb-3" id="show-more">Show More</button>
+    <script>
+      document.getElementById("show-more").addEventListener("click", function() {
+        var comments = document.getElementsByClassName("comment");
+        for (var i = 15; i < comments.length; i++) {
+          if (comments[i].style.display === "none") {
+            comments[i].style.display = "block";
+          } else {
+            comments[i].style.display = "none";
+          }
+        }
+      });
+    </script>
+
+    
     <!-- Pagination links -->
     <div class="pagination">
             <span class="step-links">

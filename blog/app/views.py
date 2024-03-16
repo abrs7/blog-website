@@ -72,7 +72,7 @@ def CommentList(request):
     post_slug = request.GET.get('post_id')
 
     # Retrieve the post object based on the post_slug
-    post = get_object_or_404(Post, post=post_slug)
+    post = get_object_or_404(Post, slug=post_slug)
 
     # Filter comments related to the post
     comments = Comment.objects.filter(post=post)
@@ -155,25 +155,6 @@ class PostDetail(View):
 
         return render(request, 'post_detail.html', {'post': post, 'comments': comments})    
 
-# def PostDetail(request, post_id):
-#     post = Post.objects.get(id = post_id)
-#     comment_list = Comment.objects.filter(post = post)
-
-#     paginator = Paginator(comment_list, 4)
-#     page = request.GET.get('page')
-
-#     try:
-#         comments = paginator.get(page)
-#     except PageNotAnInteger:
-#         comments = paginator.page(1)
-#     except EmptyPage:
-#         comments = paginator.page(paginator.num_pages)
-#     return render(request, 'post_detail.html', {'post': post, 'comments': comments})            
-
-#     post = get_object_or_404(Post, id = post_id)
-#     return render(request, 'post_detail.html', {'post': post})    
-
-
 class CreatePost( LoginRequiredMixin ,CreateView):
     model = Post
     form_class = CreatePost
@@ -204,3 +185,16 @@ class CreateComment( LoginRequiredMixin ,CreateView):
         # Set the user associated with this comment
         form.instance.name = self.request.user
         return super().form_valid(form)
+
+def show_more_comments(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    start_index = int(request.GET.get('start_index', 0))
+    end_index = start_index + 15
+    comments = post.comments.all()[start_index:end_index]
+    context = {
+        'comments': comments,
+        'start_index': start_index,
+        'end_index': end_index,
+        'post_id': post.id,
+    }
+    return render(request, 'more_comments.html', context)        

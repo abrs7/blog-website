@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.core.validators import MaxValueValidator
 # Create your models here.
 
 STATUS = ((0,'Draft'),(1,'Published'))
@@ -47,7 +48,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=256, blank=False)
     last_name = models.CharField(max_length=256, blank=False)
-    profile_pic = models.ImageField(null=True, blank=True,default='bg.jpg', upload_to='images/')
+    profile_pic = models.ImageField(null=True, blank=True,default='images/bg.jpg', upload_to='images/')
     bio = models.TextField()
     linkedin_url = models.URLField(max_length=105, default='')
     location = models.CharField(max_length=30, default='', blank=True)
@@ -59,6 +60,12 @@ class Profile(models.Model):
     instagram_url = models.URLField(max_length=256, default='')
     facebook_url = models.URLField(max_length=256, default='')  # Provide a default value
     twitter_url = models.URLField(max_length=256, default='')
+    programming_proficiency = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
+    problem_solving = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
+    critical_thinking = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
+    communication_skills = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
+    adaptability = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
+    attention_to_detail = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(100)])
 
     def __str__(self):
         return str(self.user)
