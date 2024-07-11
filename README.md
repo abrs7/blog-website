@@ -25,8 +25,8 @@ Welcome to My Awesome Blog! This repository contains the source code for a full-
 
 1. **Clone the Repository**
     ```sh
-    git clone https://github.com/your-username/your-blog-repo.git
-    cd your-blog-repo
+    git clone https://github.com/abrs7/blog-website.git
+    cd blog-website
     ```
 
 2. **Backend Setup**
@@ -65,12 +65,12 @@ We welcome contributions from the community! To contribute:
 
 1. **Fork the Repository**
     ```sh
-    git fork https://github.com/your-username/your-blog-repo.git
+    git fork https://github.com/abrs7/blog-website.git
     ```
 
 2. **Create a Feature Branch**
     ```sh
-    git checkout -b feature/your-feature-name
+    git checkout -b feature/development
     ```
 
 3. **Commit Your Changes**
@@ -80,7 +80,7 @@ We welcome contributions from the community! To contribute:
 
 4. **Push to Your Branch**
     ```sh
-    git push origin feature/your-feature-name
+    git push origin feature/development
     ```
 
 5. **Create a Pull Request**
